@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         AWS_REGION = 'eu-central-1'
-        AWS_ACCOUNT_ID = 'your-aws-account-id'
+        AWS_ACCOUNT_ID = '295390758353'
         ECR_REGISTRY = 'your-ecr-registry'
-        ECR_REPOSITORY = 'your-ecr-repository'
+        ECR_REPOSITORY = 'jenkins'
         DOCKER_IMAGE_NAME = 'my-docker-image'
     }
 
@@ -29,7 +29,7 @@ pipeline {
                     sh "docker build -t ${dockerImageTag} ."
 
                     // Configure AWS credentials for ECR
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'your-aws-credentials']]) {
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins']]) {
                         // Login to ECR
                         sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
