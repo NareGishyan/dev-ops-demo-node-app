@@ -1,0 +1,31 @@
+---
+- name: Deploy Docker Container
+  hosts: 3.73.126.7  # Replace with the name of your target host or a group from your Ansible inventory
+  become: yes  # This is used to elevate privileges if necessary
+
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+      become: yes  # Required if using sudo to install packages
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull Docker Image
+      docker_image:
+        name: 295390758353.dkr.ecr.eu-central-1.amazonaws.com/jenkins:9  # Replace with the Docker image you want to pull
+        source: pull
+
+    - name: Run Docker Container
+      docker_container:
+        name: devop-demo-node-app  # Replace with your desired container name
+        image: 295390758353.dkr.ecr.eu-central-1.amazonaws.com/jenkins:9  # Specify the image you want to run
+        state: started
+        ports:
+          - "80:80"  # Port mapping, adjust as needed
+        restart_policy: always  # Adjust the restart policy as needed
