@@ -1,5 +1,4 @@
-[Ubuntu]
-linux1 ansible_host=3.73.126.7 ansible_python_interpreter=/usr/bin/python3
+[web]
+webserver1 ansible_host=3.73.126.7 ansible_user=ansimble-ssh
 
-[all:vars]
-ansible_user=jenkins
+
