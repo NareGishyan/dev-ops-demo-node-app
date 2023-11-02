@@ -1,6 +1,6 @@
 ---
 - name: Deploy Docker Container
-  hosts: 3.73.126.7  # Replace with the name of your target host or a group from your Ansible inventory
+  hosts: web  # Replace with the name of your target host or a group from your Ansible inventory
   become: yes  # This is used to elevate privileges if necessary
 
   tasks:
