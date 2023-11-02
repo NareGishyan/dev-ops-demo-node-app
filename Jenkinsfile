@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_REGION = 'eu-central-1'
-        AWS_ACCOUNT_ID = '428496519623'
+        AWS_ACCOUNT_ID = '295390758353'
         ECR_REGISTRY = 'your-ecr-registry'
         ECR_REPOSITORY = 'jenkins'
         DOCKER_IMAGE_NAME = 'my-docker-image'
