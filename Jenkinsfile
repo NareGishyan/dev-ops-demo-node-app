@@ -47,7 +47,14 @@ pipeline {
         
         stage('Run Ansible Playbook') {
             steps {
-                sh "ansible-playbook -i ${ANSIBLE_HOST}, ${ANSIBLE_PLAYBOOK}"
+                script {
+                    ansiblePlaybook([
+                        credentialsId: 'ansimble-ssh',  // Configure your Ansible credentials in Jenkins
+                        playbook: "${ANSIBLE_PLAYBOOK}",
+                        inventory: '/var/lib/jenkins/workspace/multibranch-build_master/ansible-inventory',  // Specify the path to your Ansible inventory file
+                        colorized: true,
+                    ])
+                }
             }
         }
     }
