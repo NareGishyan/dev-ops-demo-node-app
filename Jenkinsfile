@@ -7,6 +7,8 @@ pipeline {
         ECR_REGISTRY = 'your-ecr-registry'
         ECR_REPOSITORY = 'jenkins'
         DOCKER_IMAGE_NAME = 'my-docker-image'
+        ANSIBLE_HOST = '3.73.126.7'
+        ANSIBLE_PLAYBOOK = '/var/lib/jenkins/workspace/multibranch-build_master/deploy_docker.yml'
     }
 
     stages {
@@ -40,6 +42,12 @@ pipeline {
                         sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:${env.BUILD_ID}"
                     }
                 }
+            }
+        }
+        
+        stage('Run Ansible Playbook') {
+            steps {
+                sh "ansible-playbook -i ${ANSIBLE_HOST}, ${ANSIBLE_PLAYBOOK}"
             }
         }
     }
