@@ -58,7 +58,7 @@
 
     - name: Include AWS ECR Login Role
       include_role:
-       name: ansible-aws-ecr-login
+       name: aws-ecr-login
       vars:
        aws_ecr_login_repository: 295390758353.dkr.ecr.eu-central-1.amazonaws.com
        aws_region: "eu-central-1"  # Pass your AWS region here
