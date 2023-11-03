@@ -32,6 +32,10 @@ pipeline {
 
                         // Apply the Terraform template
                         sh 'terraform  -chdir=./terraform apply -auto-approve'
+                        def asgName = sh(script: "terraform output -json asg_name", returnStdout: true).trim()
+
+                         // Set the ASG name as an environment variable
+                        currentBuild.buildEnviroment['ASG_NAME'] = asgName
                     }
                 }
             }
@@ -76,7 +80,7 @@ pipeline {
                         playbook: "${ANSIBLE_PLAYBOOK}",
                         inventory: '/var/lib/jenkins/workspace/multibranch-build_master/ansible-inventory',  // Specify the path to your Ansible inventory file
                         colorized: true,
-                        extraVars: [docker_image_tag: "${DOCKER_IMAGE_NAME}:${env.BUILD_ID}"]
+                        extraVars: [docker_image_tag: "${DOCKER_IMAGE_NAME}:${env.BUILD_ID}", asg_name: "${evn.ASG_NAME}"]
                     ])
                 }
             }
