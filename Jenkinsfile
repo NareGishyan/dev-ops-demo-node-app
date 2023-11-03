@@ -27,13 +27,11 @@ pipeline {
                 script {
                     // Configure AWS credentials for Terraform
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins']]) {
-                        // Initialize Terraform
-                        sh 'cd /var/lib/jenkins/workspace/Devops-demo_master/terraform'
-                        sh 'ls'
-                        sh 'terraform init'
+
+                        sh 'sudo terraform -chdir=./terraform init'
 
                         // Apply the Terraform template
-                        sh 'terraform apply -auto-approve'
+                        sh 'sudo terraform  -chdir=./terraform apply -auto-approve'
                     }
                 }
             }
