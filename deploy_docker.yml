@@ -57,13 +57,13 @@
        enabled: yes
        
    - name: Include AWS ECR Login Role
-      include_role:
-        name: ansible-aws-ecr-login
-      vars:
-        aws_ecr_login_repository: 295390758353.dkr.ecr.eu-central-1.amazonaws.com
-        aws_region: eu-central  # Pass your AWS region here
-        aws_access_key: "{{ aws_access_key_id }}"  # Pass your AWS access key here
-        aws_secret_key: "{{ aws_secret_access_key }}"
+     include_role:
+       name: ansible-aws-ecr-login
+     vars:
+       aws_ecr_login_repository: 295390758353.dkr.ecr.eu-central-1.amazonaws.com
+       aws_region: eu-central  # Pass your AWS region here
+       aws_access_key: "{{ aws_access_key_id }}"  # Pass your AWS access key here
+       aws_secret_key: "{{ aws_secret_access_key }}"
 
    - name: Pull Docker Image
      docker_image:
