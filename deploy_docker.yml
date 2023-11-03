@@ -56,13 +56,11 @@
        state: started
        enabled: yes
 
-   - name: Authenticate with AWS ECR
-     shell: |
-       eval $(aws ecr get-login --no-include-email --region us-east-1)
-     environment:
-       AWS_REGION: eu-central-1
-     changed_when: false
-     ignore_errors: yes  # Ignore non-zero exit status as the command typically outputs a "docker login" command
+   tasks:
+    - ansible.builtin.include_role:
+        ansible-aws-ecr-login
+      vars:
+        aws_ecr_login_repository: 295390758353.dkr.ecr.eu-central-1.amazonaws.com
 
    - name: Pull Docker Image
      docker_image:
