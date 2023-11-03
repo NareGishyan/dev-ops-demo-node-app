@@ -3,6 +3,10 @@
   become: true  # This is used to elevate privileges if necessary
 
   tasks:
+   - ansible.builtin.include_role:
+        ansible-aws-ecr-login
+      vars:
+        aws_ecr_login_repository: 295390758353.dkr.ecr.eu-central-1.amazonaws.com
    - name: Install aptitude
      apt:
        name: aptitude
@@ -55,12 +59,6 @@
        name: docker
        state: started
        enabled: yes
-
-   tasks:
-    - ansible.builtin.include_role:
-        ansible-aws-ecr-login
-      vars:
-        aws_ecr_login_repository: 295390758353.dkr.ecr.eu-central-1.amazonaws.com
 
    - name: Pull Docker Image
      docker_image:
