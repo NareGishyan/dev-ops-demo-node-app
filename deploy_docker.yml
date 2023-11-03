@@ -26,6 +26,13 @@
      apt_key:
        url: https://download.docker.com/linux/ubuntu/gpg
        state: present  
+
+   - name: Update and upgrade apt packages
+     become: true
+     apt:
+       upgrade: yes
+       update_cache: yes
+       cache_valid_time: 86400
   
    - name: Update apt and install docker-ce
      apt:
