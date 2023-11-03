@@ -25,6 +25,7 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 script {
+                    sh "env"
                     def dockerImageTag = "${DOCKER_IMAGE_NAME}:${env.BUILD_ID}"
 
                     // Build the Docker image
