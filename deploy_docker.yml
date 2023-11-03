@@ -3,77 +3,77 @@
   become: true  # This is used to elevate privileges if necessary
 
   tasks:
-   - name: Install aptitude
-     apt:
-       name: aptitude
-       state: latest
-       update_cache: true
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
 
-   - name: Install required system packages
-     apt:
-       pkg:
-         - apt-transport-https
-         - ca-certificates
-         - curl
-         - software-properties-common
-         - python3-pip
-         - virtualenv
-         - python3-setuptools
-       state: latest
-       update_cache: true
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
 
-   - name: Add Docker GPG apt Key
-     apt_key:
-       url: https://download.docker.com/linux/ubuntu/gpg
-       state: present  
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
 
-   - name: Add Docker Repository
-     apt_repository:
-       repo: deb https://download.docker.com/linux/ubuntu bionic stable
-       state: present
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
 
 
-   - name: Update and upgrade apt packages
-     become: true
-     apt:
-       upgrade: yes
-       update_cache: yes
-       cache_valid_time: 86400
-  
-   - name: Update apt and install docker-ce
-     apt:
-       name: docker-ce
-       state: latest
-       update_cache: true
+    - name: Update and upgrade apt packages
+      become: true
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400
 
-   - name: Install Docker Module for Python
-     pip:
-       name: docker
-       
-   - name: Start Docker service
-     service:
-       name: docker
-       state: started
-       enabled: yes
-       
-   - name: Include AWS ECR Login Role
-     include_role:
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Include AWS ECR Login Role
+      include_role:
        name: ansible-aws-ecr-login
-     vars:
+      vars:
        aws_ecr_login_repository: 295390758353.dkr.ecr.eu-central-1.amazonaws.com
-       aws_region: eu-central  # Pass your AWS region here
+       aws_region: "eu-central-1"  # Pass your AWS region here
        aws_access_key: "{{ aws_access_key_id }}"  # Pass your AWS access key here
        aws_secret_key: "{{ aws_secret_access_key }}"
 
-   - name: Pull Docker Image
-     docker_image:
-       name: 295390758353.dkr.ecr.eu-central-1.amazonaws.com/jenkins:9  # Replace with the Docker image you want to pull
-       source: pull
-   - name: Run Docker Container
-     docker_container:
-      name: devop-demo-node-app  # Replace with your desired container name
-      image: 295390758353.dkr.ecr.eu-central-1.amazonaws.com/jenkins:9  # Specify the image you want to run
-      state: started
-      ports:
-        - "80:80"  # Port mapping, adjust as needed
-      restart_policy: always  # Adjust the restart policy as needed
+    - name: Pull Docker Image
+      docker_image:
+        name: 295390758353.dkr.ecr.eu-central-1.amazonaws.com/jenkins:9  # Replace with the Docker image you want to pull
+        source: pull
+    - name: Run Docker Container
+      docker_container:
+       name: devop-demo-node-app  # Replace with your desired container name
+       image: 295390758353.dkr.ecr.eu-central-1.amazonaws.com/jenkins:9  # Specify the image you want to run
+       state: started
+       ports:
+         - "80:80"  # Port mapping, adjust as needed
+         restart_policy: always  # Adjust the restart policy as needed
