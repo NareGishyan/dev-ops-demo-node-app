@@ -1,20 +1,49 @@
 ---
 - name: Deploy Docker Container
   hosts: web  # Replace with the name of your target host or a group from your Ansible inventory
-  become: yes  # This is used to elevate privileges if necessary
+  become: true  # This is used to elevate privileges if necessary
 
   tasks:
-    - name: Install Docker
+   - name: Install aptitude
       apt:
-        name: docker.io
-        state: present
-      become: yes  # Required if using sudo to install packages
+        name: aptitude
+        state: latest
+        update_cache: true
 
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present  
+  
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Install Docker Module for Python
+      pip:
+        name: docker
+        
     - name: Start Docker service
       service:
         name: docker
         state: started
         enabled: yes
+    
 
     - name: Pull Docker Image
       docker_image:
