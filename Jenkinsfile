@@ -30,7 +30,7 @@ pipeline {
 
                     // Build the Docker image
                     //sh "docker build -t ${dockerImageTag} ."
-                    dockerImage = docker.build('dockerImageTag')
+                    dockerImage = docker.build(dockerImageTag)
 
                     // Configure AWS credentials for ECR
                  //   withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins']]) {
