@@ -33,28 +33,23 @@ pipeline {
                     // Configure AWS credentials for ECR
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins']]) {
                         // Login to ECR
-        
-                        // sh "aws ecr-public get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin public.ecr.aws"
-                       def dockerLoginCommand = sh(script: 'aws ecr-public get-login-password --region us-east-1', returnStdout: true).trim()
-                        sh "echo \$${dockerLoginCommand} | docker login --username AWS --password-stdin public.ecr.aws/y2h4n5k3"
-
-                        // sh "aws --region eu-central-1 ecr get-login-password | docker login --username AWS --password-stdin 295390758353.dkr.ecr.eu-central-1.amazonaws.com"
+                        sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
                         // Tag the Docker image for ECR
-                        sh "docker tag ${dockerImageTag} public.ecr.aws/y2h4n5k3/jenkins-public"
+                        sh "docker tag ${dockerImageTag} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:${env.BUILD_ID}"
 
                         // Push the Docker image to ECR
-                        sh "docker push public.ecr.aws/y2h4n5k3/jenkins-public"
+                        sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:${env.BUILD_ID}"
                     }
                 }
             }
         }
-        
+
         stage('Run Ansible Playbook') {
             steps {
                 script {
                     ansiblePlaybook([
-                        credentialsId: "ansimble-ssh",
+                        credentialsId: 'ansible-ssh',  // Configure your Ansible credentials in Jenkins
                         playbook: "${ANSIBLE_PLAYBOOK}",
                         inventory: '/var/lib/jenkins/workspace/multibranch-build_master/ansible-inventory',  // Specify the path to your Ansible inventory file
                         colorized: true,
