@@ -8,7 +8,7 @@ pipeline {
         ECR_REPOSITORY = 'jenkins'
         DOCKER_IMAGE_NAME = 'tigran222/my-app'
         ANSIBLE_HOST = '3.73.126.7'
-        ANSIBLE_PLAYBOOK = '/var/lib/jenkins/workspace/multibranch-build_master/deploy_docker.yml'
+        ANSIBLE_PLAYBOOK = '/var/lib/jenkins/workspace/Devops-demo_master/deploy_docker.yml'
     }
 
     stages {
@@ -78,7 +78,7 @@ pipeline {
                 script {
                     ansiblePlaybook([
                         playbook: "${ANSIBLE_PLAYBOOK}",
-                        inventory: '/var/lib/jenkins/workspace/multibranch-build_master/ansible-inventory',  // Specify the path to your Ansible inventory file
+                        inventory: '/var/lib/jenkins/workspace/Devops-demo_master/ansible-inventory',  // Specify the path to your Ansible inventory file
                         colorized: true,
                         extraVars: [docker_image_tag: "${DOCKER_IMAGE_NAME}:${env.BUILD_ID}", asg_name: "web-lc-20231103204537013900000001-asg"]
                     ])
