@@ -28,14 +28,14 @@ pipeline {
                     // Configure AWS credentials for Terraform
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins']]) {
 
-                        sh 'terraform -chdir=./terraform init'
+                        // sh 'terraform -chdir=./terraform init'
 
-                        // Apply the Terraform template
-                        sh 'terraform  -chdir=./terraform apply -auto-approve'
-                        def asgName = sh(script: "terraform output -json asg_name", returnStdout: true).trim()
+                        // // Apply the Terraform template
+                        // sh 'terraform  -chdir=./terraform apply -auto-approve'
+                        // def asgName = sh(script: "terraform output -json asg_name", returnStdout: true).trim()
 
                          // Set the ASG name as an environment variable
-                        currentBuild.buildEnviroment['ASG_NAME'] = asgName
+                        currentBuild.buildEnviroment['ASG_NAME'] = "web-lc-20231103203755339700000001-asg" // asgName
                     }
                 }
             }
