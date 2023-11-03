@@ -35,7 +35,7 @@ pipeline {
                         // def asgName = sh(script: "terraform output -json asg_name", returnStdout: true).trim()
 
                          // Set the ASG name as an environment variable
-                        currentBuild.buildEnviroment['ASG_NAME'] = "web-lc-20231103203755339700000001-asg" // asgName
+                        currentBuild.buildEnviroment['ASG_NAME'] = "web-lc-20231103204537013900000001-asg" // asgName
                     }
                 }
             }
