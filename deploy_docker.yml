@@ -1,7 +1,33 @@
 ---
-- hosts: web  # Replace with the name of your target host or a group from your Ansible inventory
-  become: true  # This is used to elevate privileges if necessary
+- name: "fetching instance details"
+  become: false
+  hosts: localhost
+  vars:
+    region: "eu-central-1" # Change to your region
+    asg_name: "{{asg_name}}" #Change to your autoscalling group name
+  tasks:
+    - name: "gathering instance details"
+      ec2_instance_info:
+        region: "{{ region }}"
+        filters:
+          "tag:aws:autoscaling:groupName": "{{ asg_name }}"
+          instance-state-name: ["running"]
+      register: instance_details
+    - name: "creating dynamic inventory"
+      add_host:
+        groups: "asg_instances"
+        hostname: "{{ item.public_ip_address }}"
+        ansible_ssh_user: "ubuntu" # Change to your username
+        ansible_ssh_host: "{{ item.public_ip_address }}"
+        ansible_ssh_port: "22"
+        ansible_ssh_private_key_file: "aws-ws.pem" # Change to your key
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+      loop: "{{ instance_details.instances }}"
 
+- name: "Deploying Docker"
+  hosts: all
+  become: true
+  serial: 1
   tasks:
     - name: Install aptitude
       apt:
@@ -62,9 +88,9 @@
         source: pull
     - name: Run Docker Container
       docker_container:
-       name: devop-demo-node-app  # Replace with your desired container name
-       image: "{{docker_image_tag}}"  # Specify the image you want to run
-       state: started
-       ports:
-         - "80:80"  # Port mapping, adjust as needed
-       restart_policy: always  # Adjust the restart policy as needed
+        name: devop-demo-node-app  # Replace with your desired container name
+        image: "{{docker_image_tag}}"  # Specify the image you want to run
+        state: started
+        ports:
+          - "80:80"  # Port mapping, adjust as needed
+        restart_policy: always  # Adjust the restart policy as needed
