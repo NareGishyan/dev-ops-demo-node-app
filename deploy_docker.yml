@@ -1,60 +1,58 @@
 ---
-- name: Deploy Docker Container
-  hosts: web  # Replace with the name of your target host or a group from your Ansible inventory
+- hosts: web  # Replace with the name of your target host or a group from your Ansible inventory
   become: true  # This is used to elevate privileges if necessary
 
   tasks:
    - name: Install aptitude
-      apt:
-        name: aptitude
-        state: latest
-        update_cache: true
+     apt:
+       name: aptitude
+       state: latest
+       update_cache: true
 
-    - name: Install required system packages
-      apt:
-        pkg:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - software-properties-common
-          - python3-pip
-          - virtualenv
-          - python3-setuptools
-        state: latest
-        update_cache: true
+   - name: Install required system packages
+     apt:
+       pkg:
+         - apt-transport-https
+         - ca-certificates
+         - curl
+         - software-properties-common
+         - python3-pip
+         - virtualenv
+         - python3-setuptools
+       state: latest
+       update_cache: true
 
-    - name: Add Docker GPG apt Key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present  
+   - name: Add Docker GPG apt Key
+     apt_key:
+       url: https://download.docker.com/linux/ubuntu/gpg
+       state: present  
   
-    - name: Update apt and install docker-ce
-      apt:
-        name: docker-ce
-        state: latest
-        update_cache: true
+   - name: Update apt and install docker-ce
+     apt:
+       name: docker-ce
+       state: latest
+       update_cache: true
 
-    - name: Install Docker Module for Python
-      pip:
-        name: docker
-        
-    - name: Start Docker service
-      service:
-        name: docker
-        state: started
-        enabled: yes
+   - name: Install Docker Module for Python
+     pip:
+       name: docker
+       
+   - name: Start Docker service
+     service:
+       name: docker
+       state: started
+       enabled: yes
     
 
-    - name: Pull Docker Image
-      docker_image:
-        name: 295390758353.dkr.ecr.eu-central-1.amazonaws.com/jenkins:9  # Replace with the Docker image you want to pull
-        source: pull
-
-    - name: Run Docker Container
-      docker_container:
-        name: devop-demo-node-app  # Replace with your desired container name
-        image: 295390758353.dkr.ecr.eu-central-1.amazonaws.com/jenkins:9  # Specify the image you want to run
-        state: started
-        ports:
-          - "80:80"  # Port mapping, adjust as needed
-        restart_policy: always  # Adjust the restart policy as needed
+   - name: Pull Docker Image
+     docker_image:
+       name: 295390758353.dkr.ecr.eu-central-1.amazonaws.com/jenkins:9  # Replace with the Docker image you want to pull
+       source: pull
+   - name: Run Docker Container
+     docker_container:
+      name: devop-demo-node-app  # Replace with your desired container name
+      image: 295390758353.dkr.ecr.eu-central-1.amazonaws.com/jenkins:9  # Specify the image you want to run
+      state: started
+      ports:
+        - "80:80"  # Port mapping, adjust as needed
+      restart_policy: always  # Adjust the restart policy as needed
