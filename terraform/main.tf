@@ -1,6 +1,15 @@
 provider "aws" {
   region = "eu-central-1" # Channge to your region
 }
+ //add s3 bucket for terraform state
+
+terraform {
+  backend "s3" {
+    bucket = "terraform-state-devops-demo"
+    region = "eu-central-1"
+    key = "terraform.tfstate"
+  }
+}
 
 variable "vpc_id" {
   default = "vpc-04335a0ea14921c1a"
@@ -37,6 +46,7 @@ resource "aws_launch_configuration" "web_lc" {
   instance_type               = "t2.micro"
   security_groups             = [aws_security_group.web_sg.id]
   key_name                    = "aws-ws" #Change to your SSH keys
+  user_data                   = file("web.sh")
   associate_public_ip_address = true
   lifecycle {
     create_before_destroy = true
@@ -67,7 +77,7 @@ resource "aws_security_group" "elb_http" {
 resource "aws_elb" "web_elb" {
   name                      = "web-elb"
   security_groups           = [aws_security_group.elb_http.id]
-  subnets                   = ["subnet-0fc293b22793b78da", "subnet-009646a638f6de08b"] #Change to your Subnets(Must be in two diferent Availabiliity Zones)
+  subnets                   = ["subnet-0fc293b22793b78da", "subnet-0e1465c2024916ecb"] #Change to your Subnets(Must be in two diferent Availabiliity Zones)
   cross_zone_load_balancing = true
   health_check {
     healthy_threshold   = 2
@@ -101,7 +111,7 @@ resource "aws_autoscaling_group" "web" {
     "GroupTotalInstances"
   ]
   metrics_granularity = "1Minute"
-  vpc_zone_identifier = ["subnet-0fc293b22793b78da", "subnet-009646a638f6de08b"] #Change to your Subnets
+  vpc_zone_identifier = ["subnet-0fc293b22793b78da", "subnet-0e1465c2024916ecb"] #Change to your Subnets
   lifecycle {
     create_before_destroy = true
   }
@@ -114,10 +124,6 @@ resource "aws_autoscaling_group" "web" {
 
 output "web_loadbalancer_url" {
   value = aws_elb.web_elb.dns_name
-}
-
-output "asg_name" {
-  value = aws_autoscaling_group.web.name
 }
 
 
