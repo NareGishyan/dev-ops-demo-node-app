@@ -59,12 +59,12 @@
 
    - name: Pull Docker Image
      docker_image:
-       name: 295390758353.dkr.ecr.eu-central-1.amazonaws.com/jenkins:9  # Replace with the Docker image you want to pull
+       name: public.ecr.aws/y2h4n5k3/jenkins-public  # Replace with the Docker image you want to pull
        source: pull
    - name: Run Docker Container
      docker_container:
       name: devop-demo-node-app  # Replace with your desired container name
-      image: 295390758353.dkr.ecr.eu-central-1.amazonaws.com/jenkins:9  # Specify the image you want to run
+      image: public.ecr.aws/y2h4n5k3/jenkins-public  # Specify the image you want to run
       state: started
       ports:
         - "80:80"  # Port mapping, adjust as needed
