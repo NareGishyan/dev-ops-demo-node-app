@@ -116,6 +116,10 @@ output "web_loadbalancer_url" {
   value = aws_elb.web_elb.dns_name
 }
 
+output "asg_name" {
+  value = aws_autoscaling_group.web.name
+}
+
 
 # resource "aws_lb" "web_elb" {
 #   name                       = "web-elb"
