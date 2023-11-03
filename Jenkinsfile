@@ -35,8 +35,8 @@ pipeline {
                         // Login to ECR
         
                         // sh "aws ecr-public get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin public.ecr.aws"
-                        // sh "aws ecr-public get-login-password --region eu-central-1 | docker login --username AWS -p $(aws ecr get-login-password --region eu-central-1 ) public.ecr.aws/y2h4n5k3/jenkins-public"
-                        sh "aws --region eu-central-1 ecr get-login-password | docker login --username AWS --password-stdin 295390758353.dkr.ecr.eu-central-1.amazonaws.com"
+                        sh "aws ecr-public get-login-password --region eu-central-1 | docker login --username AWS -p "$(aws ecr get-login-password --region eu-central-1 )" public.ecr.aws"
+                        // sh "aws --region eu-central-1 ecr get-login-password | docker login --username AWS --password-stdin 295390758353.dkr.ecr.eu-central-1.amazonaws.com"
 
                         // Tag the Docker image for ECR
                         sh "docker tag ${dockerImageTag} public.ecr.aws/y2h4n5k3/jenkins-public"
