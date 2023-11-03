@@ -52,6 +52,7 @@ pipeline {
                         playbook: "${ANSIBLE_PLAYBOOK}",
                         inventory: '/var/lib/jenkins/workspace/multibranch-build_master/ansible-inventory',  // Specify the path to your Ansible inventory file
                         colorized: true,
+                        extraVars: [aws_id: env.AWS_ACCOUNT_ID]
                     ])
                 }
             }
