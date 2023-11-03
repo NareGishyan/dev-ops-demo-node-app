@@ -28,7 +28,7 @@ pipeline {
                     // Configure AWS credentials for Terraform
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins']]) {
                         // Initialize Terraform
-                        sh 'cd terraform'
+                        sh 'cd /var/lib/jenkins/workspace/Devops-demo_master/terraform'
                         sh 'terraform init'
 
                         // Apply the Terraform template
