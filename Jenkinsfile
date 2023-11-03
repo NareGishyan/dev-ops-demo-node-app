@@ -78,7 +78,7 @@ pipeline {
                 script {
                     ansiblePlaybook([
                         playbook: "${ANSIBLE_PLAYBOOK}",
-                        inventory: '/var/lib/jenkins/workspace/Devops-demo_master/ansible-inventory',  // Specify the path to your Ansible inventory file
+                        // inventory: '/var/lib/jenkins/workspace/Devops-demo_master/ansible-inventory',  // Specify the path to your Ansible inventory file
                         colorized: true,
                         extraVars: [docker_image_tag: "${DOCKER_IMAGE_NAME}:${env.BUILD_ID}", asg_name: "web-lc-20231103204537013900000001-asg"]
                     ])
