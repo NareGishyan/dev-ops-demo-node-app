@@ -34,7 +34,8 @@ pipeline {
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins']]) {
                         // Login to ECR
         
-                        sh "aws ecr-public get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin public.ecr.aws"
+                        // sh "aws ecr-public get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin public.ecr.aws"
+                        sh "aws ecr-public get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin public.ecr.aws/y2h4n5k3"
 
                         // Tag the Docker image for ECR
                         sh "docker tag ${dockerImageTag} public.ecr.aws/y2h4n5k3/jenkins-public"
