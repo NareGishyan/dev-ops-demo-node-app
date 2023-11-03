@@ -22,24 +22,24 @@ pipeline {
             }
         }
 
-        stage('Create infrastructure with Terraform') {
-            steps {
-                script {
-                    // Configure AWS credentials for Terraform
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins']]) {
+        // stage('Create infrastructure with Terraform') {
+        //     steps {
+        //         script {
+        //             // Configure AWS credentials for Terraform
+        //             withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins']]) {
 
-                        // sh 'terraform -chdir=./terraform init'
+        //                 // sh 'terraform -chdir=./terraform init'
 
-                        // // Apply the Terraform template
-                        // sh 'terraform  -chdir=./terraform apply -auto-approve'
-                        // def asgName = sh(script: "terraform output -json asg_name", returnStdout: true).trim()
+        //                 // // Apply the Terraform template
+        //                 // sh 'terraform  -chdir=./terraform apply -auto-approve'
+        //                 // def asgName = sh(script: "terraform output -json asg_name", returnStdout: true).trim()
 
-                         // Set the ASG name as an environment variable
-                        currentBuild.buildEnviroment['ASG_NAME'] = "web-lc-20231103204537013900000001-asg" // asgName
-                    }
-                }
-            }
-        }
+        //                  // Set the ASG name as an environment variable
+        //                 currentBuild.buildEnviroment['ASG_NAME'] = "web-lc-20231103204537013900000001-asg" // asgName
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Build and Push Docker Image') {
             steps {
@@ -80,7 +80,7 @@ pipeline {
                         playbook: "${ANSIBLE_PLAYBOOK}",
                         inventory: '/var/lib/jenkins/workspace/multibranch-build_master/ansible-inventory',  // Specify the path to your Ansible inventory file
                         colorized: true,
-                        extraVars: [docker_image_tag: "${DOCKER_IMAGE_NAME}:${env.BUILD_ID}", asg_name: "${evn.ASG_NAME}"]
+                        extraVars: [docker_image_tag: "${DOCKER_IMAGE_NAME}:${env.BUILD_ID}", asg_name: "web-lc-20231103204537013900000001-asg"]
                     ])
                 }
             }
