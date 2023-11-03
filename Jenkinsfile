@@ -33,7 +33,8 @@ pipeline {
                     // Configure AWS credentials for ECR
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins']]) {
                         // Login to ECR
-                        sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
+        
+                        sh "aws ecr-public get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin public.ecr.aws"
 
                         // Tag the Docker image for ECR
                         sh "docker tag ${dockerImageTag} public.ecr.aws/y2h4n5k3/jenkins-public"
@@ -49,6 +50,7 @@ pipeline {
             steps {
                 script {
                     ansiblePlaybook([
+                        credentialsId: "ansimble-ssh",
                         playbook: "${ANSIBLE_PLAYBOOK}",
                         inventory: '/var/lib/jenkins/workspace/multibranch-build_master/ansible-inventory',  // Specify the path to your Ansible inventory file
                         colorized: true,
