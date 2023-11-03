@@ -36,10 +36,10 @@ pipeline {
                         sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
 
                         // Tag the Docker image for ECR
-                        sh "docker tag ${dockerImageTag} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:${env.BUILD_ID}"
+                        sh "docker tag ${dockerImageTag} public.ecr.aws/y2h4n5k3/jenkins-public
 
                         // Push the Docker image to ECR
-                        sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:${env.BUILD_ID}"
+                        sh "docker push public.ecr.aws/y2h4n5k3/jenkins-public
                     }
                 }
             }
