@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_REGION = 'eu-central-1'
-        AWS_ACCOUNT_ID = '295390758353'
+        AWS_ACCOUNT_ID = '428496519623'
         ECR_REGISTRY = 'your-ecr-registry'
         ECR_REPOSITORY = 'jenkins'
         DOCKER_IMAGE_NAME = 'tigran222/my-app'
@@ -18,6 +18,22 @@ pipeline {
                     git branch: 'master',
                         credentialsId: 'github-ssh',
                         url: 'https://github.com/NareGishyan/dev-ops-demo-node-app.git'
+                }
+            }
+        }
+
+        stage('Create infrastructure with Terraform') {
+            steps {
+                script {
+                    // Configure AWS credentials for Terraform
+                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-jenkins']]) {
+                        // Initialize Terraform
+                        cd 'terraform'
+                        sh 'terraform init'
+
+                        // Apply the Terraform template
+                        sh 'terraform apply -auto-approve'
+                    }
                 }
             }
         }
@@ -46,15 +62,13 @@ pipeline {
                        withDockerRegistry([credentialsId: 'docker-pass', url: ""]) {
                            dockerImage.push()
                         }
-
-
-
                 }
 
 
             }
 
         }
+
 
         stage('Run Ansible Playbook') {
             steps {
