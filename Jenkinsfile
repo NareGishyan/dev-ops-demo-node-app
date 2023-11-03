@@ -36,7 +36,7 @@ pipeline {
         
                         // sh "aws ecr-public get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin public.ecr.aws"
                        def dockerLoginCommand = sh(script: 'aws ecr-public get-login-password --region us-east-1', returnStdout: true).trim()
-                        sh "echo \$${dockerLoginCommand} | docker login --username AWS --password-stdin public.ecr.aws"
+                        sh "echo \$${dockerLoginCommand} | docker login --username AWS --password-stdin public.ecr.aws/y2h4n5k3"
 
                         // sh "aws --region eu-central-1 ecr get-login-password | docker login --username AWS --password-stdin 295390758353.dkr.ecr.eu-central-1.amazonaws.com"
 
